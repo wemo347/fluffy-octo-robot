@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="药品管理系统" />
+    <title>药品管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="root">
+      <header class="app-header">
+        <h1>药品管理系统</h1>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="#" class="active" data-view="list">药品列表</a></li>
+            <li><a href="#" data-view="add">添加药品</a></li>
+            <li><a href="#" data-view="categories">药品类别</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main class="app-main">
+        <!-- 列表视图 -->
+        <div class="view" id="list-view">
+          <!-- 欢迎信息区块 -->
+          <div class="welcome-container">
+            <h2 class="welcome-title">欢迎使用药品查询小程序！</h2>
+            <p class="welcome-text">在这里，您可以快速查找所需药品的信息。</p>
+            <div class="welcome-features">
+              <div class="welcome-feature-item">
+                <span class="welcome-feature-icon">🔍</span>
+                <span>输入药品名称或关键字进行搜索</span>
+              </div>
+              <div class="welcome-feature-item">
+                <span class="welcome-feature-icon">💊</span>
+                <span>查看药品详细信息和使用说明</span>
+              </div>
+              <div class="welcome-feature-item">
+                <span class="welcome-feature-icon">⏰</span>
+                <span>设置用药提醒，确保按时服药</span>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="search-box">
+              <input type="text" id="search-input" placeholder="搜索药品名称或描述...">
+              <button id="search-button">搜索</button>
+            </div>
+            <div class="filter-sort">
+              <select id="category-filter">
+                <option value="">所有类别</option>
+                <!-- 类别选项将通过 JavaScript 动态生成 -->
+              </select>
+              <select id="sort-select">
+                <option value="name-asc">名称 (A-Z)</option>
+                <option value="name-desc">名称 (Z-A)</option>
+                <option value="price-asc">价格 (低-高)</option>
+                <option value="price-desc">价格 (高-低)</option>
+                <option value="stock-asc">库存 (低-高)</option>
+                <option value="stock-desc">库存 (高-低)</option>
+              </select>
+            </div>
+          </div>
+          <div class="medicine-list" id="medicine-list">
+            <!-- 药品卡片将通过 JavaScript 动态生成 -->
+          </div>
+        </div>
+
+        <!-- 添加药品视图 -->
+        <div class="view" id="add-view" style="display: none;">
+          <h2>药品信息录入</h2>
+          <form id="add-medicine-form">
+            <div class="form-group">
+              <label for="medicine-name">药品名称</label>
+              <input type="text" id="medicine-name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="medicine-description">药品描述</label>
+              <textarea id="medicine-description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="medicine-category">药品类别</label>
+              <select id="medicine-category" required>
+                <option value="">请选择类别</option>
+                <!-- 类别选项将通过 JavaScript 动态生成 -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="medicine-price">药品价格</label>
+              <input type="number" step="0.1" id="medicine-price" name="price" required>
+            </div>
+            <div class="form-group">
+              <label for="medicine-stock">库存数量</label>
+              <input type="number" id="medicine-stock" name="stock" required>
+            </div>
+            <button type="submit" class="btn-primary">添加药品</button>
+          </form>
+        </div>
+
+        <!-- 药品详情视图 -->
+        <div class="view" id="detail-view" style="display: none;">
+          <div class="detail-container" id="medicine-detail">
+            <!-- 药品详情将通过 JavaScript 动态生成 -->
+          </div>
+          <button id="back-to-list" class="btn-secondary">返回列表</button>
+        </div>
+
+        <!-- 编辑药品视图 -->
+        <div class="view" id="edit-view" style="display: none;">
+          <h2>药品信息编辑</h2>
+          <form id="edit-medicine-form">
+            <input type="hidden" id="edit-medicine-id">
+            <div class="form-group">
+              <label for="edit-medicine-name">药品名称</label>
+              <input type="text" id="edit-medicine-name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-medicine-description">药品描述</label>
+              <textarea id="edit-medicine-description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="edit-medicine-category">药品类别</label>
+              <select id="edit-medicine-category" required>
+                <option value="">请选择类别</option>
+                <!-- 类别选项将通过 JavaScript 动态生成 -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="edit-medicine-price">药品价格</label>
+              <input type="number" step="0.1" id="edit-medicine-price" name="price" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-medicine-stock">库存数量</label>
+              <input type="number" id="edit-medicine-stock" name="stock" required>
+            </div>
+            <div class="button-group">
+              <button type="submit" class="btn-primary">保存修改</button>
+              <button type="button" id="cancel-edit" class="btn-secondary">取消</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 库存管理视图 -->
+        <div class="view" id="stock-view" style="display: none;">
+          <h2>库存管理</h2>
+          <div class="stock-container" id="stock-detail">
+            <div class="form-group">
+              <label for="stock-adjustment">调整库存数量</label>
+              <input type="number" id="stock-adjustment" required>
+            </div>
+            <div class="button-group">
+              <button id="increase-stock" class="btn-primary">增加库存</button>
+              <button id="decrease-stock" class="btn-primary" style="background-color: #f44336;">减少库存</button>
+              <button id="back-to-detail" class="btn-secondary">返回详情</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 药品类别管理视图 -->
+        <div class="view" id="categories-view" style="display: none;">
+          <h2>药品分类管理</h2>
+          <div class="categories-container">
+            <div class="categories-form">
+              <form id="add-category-form">
+                <div class="form-group">
+                  <label for="category-name">类别名称</label>
+                  <input type="text" id="category-name" name="name" required>
+                </div>
+                <button type="submit" class="btn-primary">添加类别</button>
+              </form>
+            </div>
+            <div class="categories-list" id="categories-list">
+              <!-- 类别列表将通过 JavaScript 动态生成 -->
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="app-footer">
+        <p>&copy; 2025 药品管理系统 | 陈睡中所有</p>
+      </footer>
+    </div>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
